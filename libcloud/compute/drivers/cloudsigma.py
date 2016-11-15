@@ -1062,7 +1062,8 @@ class CloudSigma_2_0_NodeDriver(CloudSigmaNodeDriver):
         return images
 
     def create_node(self, name, size, image, ex_metadata=None,
-                    ex_vnc_password=None, ex_avoid=None, ex_vlan=None):
+                    ex_vnc_password=None, ex_avoid=None, ex_vlan=None,
+                    ex_pubkeys = None):
         """
         Create a new server.
 
@@ -1097,6 +1098,9 @@ class CloudSigma_2_0_NodeDriver(CloudSigmaNodeDriver):
                         server will have two nics assigned - 1 with a public ip
                         and 1 with the provided VLAN.
         :type ex_vlan: ``str``
+
+        :param ex_pubkeys: list of public keys attached to a server. (optional)
+        :type ex_pubkeys: ``list``
         """
         is_installation_cd = self._is_installation_cd(image=image)
 
@@ -1180,6 +1184,9 @@ class CloudSigma_2_0_NodeDriver(CloudSigmaNodeDriver):
 
         data['nics'] = nics
         data['drives'] = drives
+
+        if ex_pubkeys:
+            data['pubkeys'] = ex_pubkeys
 
         action = '/servers/'
         response = self.connection.request(action=action, method='POST',
