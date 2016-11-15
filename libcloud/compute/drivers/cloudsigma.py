@@ -1206,6 +1206,21 @@ class CloudSigma_2_0_NodeDriver(CloudSigmaNodeDriver):
 
     # Server extension methods
 
+    def ex_get_node(self, node_id):
+        """
+        Retrieve information about a single node.
+
+        :param node_id: ID of the node to retrieve.
+        :type node_id: ``str``
+
+        :return: Node object.
+        :rtype: :class:`libcloud.compute.base.Node`
+        """
+        action = '/servers/%s/' % (node_id)
+        response = self.connection.request(action=action).object
+        node = self._to_node(data=response)
+        return node
+
     def ex_edit_node(self, node, params):
         """
         Edit a node.
